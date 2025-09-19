@@ -300,17 +300,21 @@ export default function NavigateScreen() {
         currentLocation // Use current GPS location as new origin
       );
 
-      if (optimizationResult?.route?.orderedStops) {
+      if (optimizationResult?.orderedStops) {
         // Update the route state for map display
-        setOptimizedRoute(optimizationResult.route);
+        setOptimizedRoute(optimizationResult);
         
-        console.log('🚛 Route re-optimized! New sequence:', optimizationResult.route.orderedStops.map(s => s.label).join(' → '));
-        console.log(`📊 Optimization saved: ${optimizationResult.route.totals.distanceKm}km, ${optimizationResult.route.totals.timeMin}min`);
+        // Convert distance from meters to km and duration from seconds to minutes
+        const distanceKm = (optimizationResult.totalDistance / 1000).toFixed(1);
+        const timeMin = Math.round(optimizationResult.totalDuration / 60);
+
+        console.log('🚛 Route re-optimized! New sequence:', optimizationResult.orderedStops.map(s => s.label).join(' → '));
+        console.log(`📊 Optimization saved: ${distanceKm}km, ${timeMin}min`);
         
         // Show success feedback to user
         Alert.alert(
           '🚛 Route Re-Optimized!',
-          `Updated route based on your current location.\n\nNew route: ${optimizationResult.route.totals.distanceKm}km, ${optimizationResult.route.totals.timeMin} min`,
+          `Updated route based on your current location.\n\nNew route: ${distanceKm}km, ${timeMin} min`,
           [{ text: 'Continue', style: 'default' }]
         );
       }
