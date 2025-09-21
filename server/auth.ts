@@ -128,15 +128,23 @@ export function setupAuth(app: Express) {
       { usernameField: 'email' },
       async (email, password, done) => {
         try {
+          console.log('LocalStrategy: Authenticating user:', email);
           const [user] = await getUserByEmail(email);
+          
           if (!user || !(await comparePasswords(password, user.password))) {
+            console.log('LocalStrategy: Invalid credentials for:', email);
             return done(null, false);
           }
+          
           if (!user.isVerified) {
+            console.log('LocalStrategy: User not verified:', email);
             return done(null, false, { message: 'Please verify your email first' });
           }
+          
+          console.log('LocalStrategy: Authentication successful for:', email);
           return done(null, user);
         } catch (error) {
+          console.error('LocalStrategy error:', error);
           return done(error);
         }
       }
@@ -313,26 +321,36 @@ export function setupAuth(app: Express) {
         return res.status(400).json({ error: error.toString() });
       }
 
+      console.log('Login attempt for:', result.data.email);
+
       passport.authenticate("local", (err: any, user: any, info: any) => {
         if (err) {
+          console.error('Passport authentication error:', err);
           return res.status(500).json({ error: "Login failed" });
         }
         if (!user) {
+          console.log('Authentication failed for user:', result.data.email, 'Info:', info);
           return res.status(401).json({ error: info?.message || "Invalid email or password" });
         }
 
+        console.log('User authenticated successfully:', user.email);
+
         req.login(user, (err) => {
           if (err) {
+            console.error('Session creation error:', err);
             return res.status(500).json({ error: "Login failed" });
           }
+          console.log('Session created for user:', user.email);
           res.json({ 
+            message: "Login successful",
             user: { 
               id: user.id, 
               email: user.email, 
               firstName: user.firstName,
               lastName: user.lastName,
               isVerified: user.isVerified,
-              isAdmin: user.isAdmin 
+              isAdmin: user.isAdmin,
+              subscriptionType: user.subscriptionType
             } 
           });
         });
@@ -356,17 +374,20 @@ export function setupAuth(app: Express) {
   // Get current user
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) {
+      console.log('User not authenticated, session:', req.session?.id);
       return res.status(401).json({ error: "Not authenticated" });
     }
     
     const user = req.user!;
+    console.log('Returning user data for:', user.email);
     res.json({ 
       id: user.id, 
       email: user.email, 
       firstName: user.firstName,
       lastName: user.lastName,
       isVerified: user.isVerified,
-      isAdmin: user.isAdmin 
+      isAdmin: user.isAdmin,
+      subscriptionType: user.subscriptionType
     });
   });
 
