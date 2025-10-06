@@ -1,10 +1,8 @@
 // Authentication guard component for DropFlow
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '../hooks/useAuth';
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -33,21 +31,21 @@ export function AuthGuard({ children, requireVerification = true }: AuthGuardPro
   // Show loading while checking authentication
   if (isLoading) {
     return (
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         <ActivityIndicator size="large" color="#dc2626" />
-        <ThemedText style={styles.loadingText}>
+        <Text style={styles.loadingText}>
           Loading your account...
-        </ThemedText>
-      </ThemedView>
+        </Text>
+      </View>
     );
   }
 
   // Show nothing while redirecting (prevents flash of content)
   if (!user || (requireVerification && !user.isVerified)) {
     return (
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         <ActivityIndicator size="large" color="#dc2626" />
-      </ThemedView>
+      </View>
     );
   }
 

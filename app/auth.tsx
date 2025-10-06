@@ -15,9 +15,6 @@ import {
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useAuth } from '../hooks/useAuth';
-import { ThemedText } from '../components/themed-text';
-import { ThemedView } from '../components/themed-view';
-import { Colors } from '../constants/theme';
 
 export default function AuthScreen() {
   const { register, verifyEmail, resendVerification, login, user } = useAuth();
@@ -177,10 +174,10 @@ export default function AuthScreen() {
 
   const renderSignupForm = () => (
     <>
-      <ThemedText style={styles.title}>Create Your Account</ThemedText>
-      <ThemedText style={styles.subtitle}>
+      <Text style={styles.title}>Create Your Account</Text>
+      <Text style={styles.subtitle}>
         Join thousands of drivers optimizing their delivery routes
-      </ThemedText>
+      </Text>
 
       <View style={styles.form}>
         <View style={styles.nameRow}>
@@ -234,9 +231,9 @@ export default function AuthScreen() {
         </Pressable>
 
         <Pressable onPress={() => setMode('login')}>
-          <ThemedText style={styles.linkText}>
+          <Text style={styles.linkText}>
             Already have an account? <Text style={styles.linkHighlight}>Sign In</Text>
-          </ThemedText>
+          </Text>
         </Pressable>
       </View>
     </>
@@ -244,10 +241,10 @@ export default function AuthScreen() {
 
   const renderLoginForm = () => (
     <>
-      <ThemedText style={styles.title}>Welcome Back</ThemedText>
-      <ThemedText style={styles.subtitle}>
+      <Text style={styles.title}>Welcome Back</Text>
+      <Text style={styles.subtitle}>
         Sign in to your DropFlow account
-      </ThemedText>
+      </Text>
 
       <View style={styles.form}>
         <TextInput
@@ -282,14 +279,14 @@ export default function AuthScreen() {
         </Pressable>
 
         <Pressable onPress={() => setMode('signup')}>
-          <ThemedText style={styles.linkText}>
+          <Text style={styles.linkText}>
             Don't have an account? <Text style={styles.linkHighlight}>Sign Up</Text>
-          </ThemedText>
+          </Text>
         </Pressable>
 
         {/* Quick Test Login */}
-        <Pressable 
-          style={[styles.button, styles.testButton, { marginTop: 16 }]} 
+        <Pressable
+          style={[styles.button, styles.testButton, { marginTop: 16 }]}
           onPress={() => handleTestLogin()}
           disabled={isLoading}
         >
@@ -297,9 +294,9 @@ export default function AuthScreen() {
         </Pressable>
 
         <Pressable onPress={() => router.push('/admin-setup')}>
-          <ThemedText style={styles.linkText}>
+          <Text style={styles.linkText}>
             <Text style={styles.linkHighlight}>Admin Setup</Text>
-          </ThemedText>
+          </Text>
         </Pressable>
       </View>
     </>
@@ -307,10 +304,10 @@ export default function AuthScreen() {
 
   const renderVerificationForm = () => (
     <>
-      <ThemedText style={styles.title}>Verify Your Email</ThemedText>
-      <ThemedText style={styles.subtitle}>
+      <Text style={styles.title}>Verify Your Email</Text>
+      <Text style={styles.subtitle}>
         We sent a 6-digit code to {pendingEmail}
-      </ThemedText>
+      </Text>
 
       <View style={styles.form}>
         <TextInput
@@ -336,15 +333,15 @@ export default function AuthScreen() {
         </Pressable>
 
         <Pressable onPress={handleResendCode} disabled={isLoading}>
-          <ThemedText style={styles.linkText}>
+          <Text style={styles.linkText}>
             Didn't receive the code? <Text style={styles.linkHighlight}>Resend</Text>
-          </ThemedText>
+          </Text>
         </Pressable>
 
         <Pressable onPress={() => setMode('login')}>
-          <ThemedText style={styles.linkText}>
+          <Text style={styles.linkText}>
             <Text style={styles.linkHighlight}>Back to Sign In</Text>
-          </ThemedText>
+          </Text>
         </Pressable>
       </View>
     </>
@@ -357,16 +354,16 @@ export default function AuthScreen() {
     >
       <StatusBar style="auto" />
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <ThemedView style={styles.content}>
+        <View style={styles.content}>
           <View style={styles.header}>
-            <ThemedText style={styles.logo}>🚛 DropFlow</ThemedText>
-            <ThemedText style={styles.tagline}>Smart Route Optimization</ThemedText>
+            <Text style={styles.logo}>🚛 DropFlow</Text>
+            <Text style={styles.tagline}>Smart Route Optimization</Text>
           </View>
 
           {mode === 'signup' && renderSignupForm()}
           {mode === 'login' && renderLoginForm()}
           {mode === 'verify' && renderVerificationForm()}
-        </ThemedView>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
